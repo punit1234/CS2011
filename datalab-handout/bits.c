@@ -170,7 +170,7 @@ int isNotEqual(int x, int y) {
  *   Rating: 3
  */
 int replaceByte(int x, int n, int c) {
-  return 2;
+  return (c<<(n<<3))|(~(255<<(n<<3))&x);
 }
 /* 
  * leastBitPos - return a mask that marks the position of the
@@ -181,7 +181,7 @@ int replaceByte(int x, int n, int c) {
  *   Rating: 2 
  */
 int leastBitPos(int x) {
-  return (~x)+1;
+  return x&((~x)+1);
 }
 /* 
  * oddBits - return word with all odd-numbered bits set to 1
@@ -190,7 +190,8 @@ int leastBitPos(int x) {
  *   Rating: 2
  */
 int oddBits(void) {
-  return 2;
+  int x=0xaa+(0xaa<<8);
+  return x+(x<<16);
 }
 /* 
  * rotateLeft - Rotate x to the left by n
@@ -201,9 +202,7 @@ int oddBits(void) {
  *   Rating: 3 
  */
 int rotateLeft(int x, int n) {
-  int z = ~((~31)|n);
-  printf("%x\n%x\n%x\n",z, (x<<n), (x>>z));
-  return (x<<n) + ~(x>>z);
+  return (((~(1<<31)) & (x>>1)) >> (33+ ~(n+1))) + (x<<n);
 }
 /* 
  * rempwr2 - Compute x%(2^n), for 0 <= n <= 30
@@ -214,10 +213,17 @@ int rotateLeft(int x, int n) {
  *   Rating: 3
  */
 int rempwr2(int x, int n) {
-    n=~(((1<<31)>>31)<<n);
-    n=x&n;
-    int z = ((x>>31)<<31);
-    return n | z;
+    //printf("%x\n", ~(!n)+1);
+    //n=~(((1<<31)>>31)<<n);
+    //n=x&n;
+    //int z = ((x>>31)<<31) & ~(~(!n)+1);
+    //return n | z;
+    //printf("%x\n%x\n%x\n\n", ~(((~(1<<31))>>n)<<n), (~(!n)+1), ~(~(!n)+1));
+
+    //x &= ~(((~(1<<31))>>n)<<n);
+    //return x & ~(~(!(x|n)+1));
+
+    return (x & ((1<<n)+(~1+1))) & ~(~(!n)+1);
 }
 /* 
  * conditional - same as x ? y : z 
@@ -252,11 +258,7 @@ int bitParity(int x) {
  *   Rating: 3
  */
 int multFiveEighths(int x) {
-  //int s = ((x>>31)&1);
-  //printf("%i\n",s);
   return (((x<<2)+x)>>3);
-  //x>>=3;
-  //return x<<2 + x; 
 }
 /* 
  * logicalNeg - implement the ! operator, using all of 
@@ -267,7 +269,7 @@ int multFiveEighths(int x) {
  *   Rating: 4 
  */
 int logicalNeg(int x) {
-  return ~((((x<<1)>>1) + ~0u)>>31);
+  return ((((~x+1)|x)>>31)&1)^1;
 }
 /* 
  * float_neg - Return bit-level equivalent of expression -f for
