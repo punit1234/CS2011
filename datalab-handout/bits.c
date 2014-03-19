@@ -213,17 +213,8 @@ int rotateLeft(int x, int n) {
  *   Rating: 3
  */
 int rempwr2(int x, int n) {
-    //printf("%x\n", ~(!n)+1);
-    //n=~(((1<<31)>>31)<<n);
-    //n=x&n;
-    //int z = ((x>>31)<<31) & ~(~(!n)+1);
-    //return n | z;
-    //printf("%x\n%x\n%x\n\n", ~(((~(1<<31))>>n)<<n), (~(!n)+1), ~(~(!n)+1));
-
-    //x &= ~(((~(1<<31))>>n)<<n);
-    //return x & ~(~(!(x|n)+1));
-
-    return (x & ((1<<n)+(~1+1))) & ~(~(!n)+1);
+  int r=x&((1<<n)+~0);
+  return r+(((~((!!r)<<n))+1)&(x>>31));
 }
 /* 
  * conditional - same as x ? y : z 
@@ -243,8 +234,12 @@ int conditional(int x, int y, int z) {
  *   Max ops: 20
  *   Rating: 4
  */
-int bitParity(int x) {
-  return 2;
+int bitParity(int x) { 
+  x=x^(x>>16);
+  x=x^(x>>8);
+  x=x^(x>>4);
+  x=x^(x>>2);
+  return (x^(x>>1))&0x1;
 }
 /*
  * multFiveEighths - multiplies by 5/8 rounding toward 0.
@@ -258,7 +253,8 @@ int bitParity(int x) {
  *   Rating: 3
  */
 int multFiveEighths(int x) {
-  return (((x<<2)+x)>>3);
+    printf("%i\n", ((x>>31)&1));
+  return (((x<<2)+x)>>3) + ((x>>31)&1);
 }
 /* 
  * logicalNeg - implement the ! operator, using all of 
@@ -272,7 +268,7 @@ int logicalNeg(int x) {
   return ((((~x+1)|x)>>31)&1)^1;
 }
 /* 
- * float_neg - Return bit-level equivalent of expression -f for
+ *2 float_neg - Return bit-level equivalent of expression -f for
  *   floating point argument f.
  *   Both the argument and result are passed as unsigned int's, but
  *   they are to be interpreted as the bit-level representations of
