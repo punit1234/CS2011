@@ -253,19 +253,20 @@ int bitParity(int x) {
  *   Rating: 3
  */
 int multFiveEighths(int x) {
-    int s = -((x >> 31) & 1); // sign bit as -1 or 0
+  
+    int s=x>>31;
+    int q=~s+1;
+    int n=(x^s)+q;
+    int y=n&7;
 
-    int n = (x ^ s) - s; // twos complement if negative
+    x=n>>3;
+    x+=(x<<2);
 
-    x = n >> 3; // divide by 8
+    
 
-    x = (x << 2) + x;   // multiply by 5; no overflow yet since 5/8 is less than one
+    y += (y << 2);
 
-    int y = n & 7;  // the bits we shifted out
-
-    y = (y << 2) + y;   // multiply by 5; no overflow
-
-    return (s ^ (x + (y >> 3))) - s; // the two pieces and complemented back
+    return (s ^ (x + (y >> 3))) +q;
 }
 /* 
  * logicalNeg - implement the ! operator, using all of 
