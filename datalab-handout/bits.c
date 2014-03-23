@@ -264,9 +264,16 @@ int multFiveEighths(int x) {
 
     
 
-    y += (y << 2);
+    y = y + (y << 2);
 
     return (s ^ (x + (y >> 3))) +q;
+    
+    /*
+    x >>= 3;
+    x &= ~((~0)<<28);
+    x += x<<2;
+    return x;
+    */
 }
 /* 
  * logicalNeg - implement the ! operator, using all of 
@@ -280,7 +287,7 @@ int logicalNeg(int x) {
   return ((((~x+1)|x)>>31)&1)^1;
 }
 /* 
- *2 float_neg - Return bit-level equivalent of expression -f for
+ * float_neg - Return bit-level equivalent of expression -f for
  *   floating point argument f.
  *   Both the argument and result are passed as unsigned int's, but
  *   they are to be interpreted as the bit-level representations of
@@ -291,10 +298,13 @@ int logicalNeg(int x) {
  *   Rating: 2
  */
 unsigned float_neg(unsigned uf) {
- return 2;
+  if (uf == 0x7fc00000 || uf == 0xffc00000)
+    return uf;
+  return uf ^ 0x80000000;
 }
+
 /* 
-skjklkjha* float_i2f - Return bit-level equivalent of expression (float) x
+ * float_i2f - Return bit-level equivalent of expression (float) x
  *   Result is returned as unsigned int, but
  *   it is to be interpreted as the bit-level representation of a
  *   single-precision floating point values.
@@ -303,6 +313,13 @@ skjklkjha* float_i2f - Return bit-level equivalent of expression (float) x
  *   Rating: 4
  */
 unsigned float_i2f(int x) {
+  unsigned exponent;
+  unsigned mts;
+  unsigned sign;
+
+  sign = x & (~(1<<31));
+  
+
   return 2;
 }
 /* 
@@ -317,5 +334,30 @@ unsigned float_i2f(int x) {
  *   Rating: 4
  */
 unsigned float_twice(unsigned uf) {
-  return 2;
+  unsigned exponent;
+  unsigned mts;
+  if (uf == 0) return uf;
+  if (uf == (1<<31)) return uf;
+  if (uf == 0x7f800000) return uf;
+  if (uf == 0x7fc00000) return uf;
+  if (uf == 0xff800000) return uf;
+  if (uf == 0xffc00000) return uf;
+
+  //get exp
+  exponent = ((uf>>23)&0xFF);
+
+  //get mantissa
+  mts = uf & ((~0)+(1<<23));
+
+  if (exponent || !mts)
+    exponent +=  1;
+  else
+    mts <<= 1;
+
+  exponent <<= 23;
+  exponent += ((uf>>31)<<31);
+  return exponent | mts;
+
+
+
 }
