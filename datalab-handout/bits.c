@@ -4,7 +4,7 @@
  * Ted Meyer (tjmeyer)
  * 
  * bits.c - Source file with your solutions to the Lab.
- *          This is the file you will hand in to your instructor.
+ *       This is the file you will hand in to your instructor.
  *
  * WARNING: Do not include the <stdio.h> header; it confuses the dlc
  * compiler. You can still use printf for debugging without including
@@ -30,24 +30,24 @@ INTEGER CODING RULES:
   must conform to the following style:
  
   int Funct(arg1, arg2, ...) {
-      /* brief description of how your implementation works */
-      int var1 = Expr1;
-      ...
-      int varM = ExprM;
+    /* brief description of how your implementation works */
+    int var1 = Expr1;
+    ...
+    int varM = ExprM;
 
-      varJ = ExprJ;
-      ...
-      varN = ExprN;
-      return ExprR;
+    varJ = ExprJ;
+    ...
+    varN = ExprN;
+    return ExprR;
   }
 
   Each "Expr" is an expression using ONLY the following:
   1. Integer constants 0 through 255 (0xFF), inclusive. You are
-      not allowed to use big constants such as 0xffffffff.
+    not allowed to use big constants such as 0xffffffff.
   2. Function arguments and local variables (no global variables).
   3. Unary integer operations ! ~
   4. Binary integer operations & ^ | + << >>
-    
+   
   Some of the problems restrict the set of allowed operators even further.
   Each "Expr" may consist of multiple operators. You are not restricted to
   one operator per line.
@@ -60,32 +60,32 @@ INTEGER CODING RULES:
   5. Use any other operations, such as &&, ||, -, or ?:
   6. Use any form of casting.
   7. Use any data type other than int.  This implies that you
-     cannot use arrays, structs, or unions.
+    cannot use arrays, structs, or unions.
 
  
   You may assume that your machine:
   1. Uses 2s complement, 32-bit representations of integers.
   2. Performs right shifts arithmetically.
   3. Has unpredictable behavior when shifting an integer by more
-     than the word size.
+    than the word size.
 
 EXAMPLES OF ACCEPTABLE CODING STYLE:
   /*
-   * pow2plus1 - returns 2^x + 1, where 0 <= x <= 31
-   */
+  * pow2plus1 - returns 2^x + 1, where 0 <= x <= 31
+  */
   int pow2plus1(int x) {
-     /* exploit ability of shifts to compute powers of 2 */
-     return (1 << x) + 1;
+    /* exploit ability of shifts to compute powers of 2 */
+    return (1 << x) + 1;
   }
 
   /*
-   * pow2plus4 - returns 2^x + 4, where 0 <= x <= 31
-   */
+  * pow2plus4 - returns 2^x + 4, where 0 <= x <= 31
+  */
   int pow2plus4(int x) {
-     /* exploit ability of shifts to compute powers of 2 */
-     int result = (1 << x);
-     result += 4;
-     return result;
+    /* exploit ability of shifts to compute powers of 2 */
+    int result = (1 << x);
+    result += 4;
+    return result;
   }
 
 FLOATING POINT CODING RULES
@@ -101,93 +101,96 @@ You are expressly forbidden to:
   3. Call any functions.
   4. Use any form of casting.
   5. Use any data type other than int or unsigned.  This means that you
-     cannot use arrays, structs, or unions.
+    cannot use arrays, structs, or unions.
   6. Use any floating point data types, operations, or constants.
 
 
 NOTES:
   1. Use the dlc (data lab checker) compiler (described in the handout) to 
-     check the legality of your solutions.
+    check the legality of your solutions.
   2. Each function has a maximum number of operators (! ~ & ^ | + << >>)
-     that you are allowed to use for your implementation of the function. 
-     The max operator count is checked by dlc. Note that '=' is not 
-     counted; you may use as many of these as you want without penalty.
+    that you are allowed to use for your implementation of the function. 
+    The max operator count is checked by dlc. Note that '=' is not 
+    counted; you may use as many of these as you want without penalty.
   3. Use the btest test harness to check your functions for correctness.
   4. Use the BDD checker to formally verify your functions
   5. The maximum number of ops for each function is given in the
-     header comment for each function. If there are any inconsistencies 
-     between the maximum ops in the writeup and in this file, consider
-     this file the authoritative source.
+    header comment for each function. If there are any inconsistencies 
+    between the maximum ops in the writeup and in this file, consider
+    this file the authoritative source.
 
 /*
  * STEP 2: Modify the following functions according the coding rules.
  * 
- *   IMPORTANT. TO AVOID GRADING SURPRISES:
- *   1. Use the dlc compiler to check that your solutions conform
- *      to the coding rules.
- *   2. Use the BDD checker to formally verify that your solutions produce 
- *      the correct answers.
+ *  IMPORTANT. TO AVOID GRADING SURPRISES:
+ *  1. Use the dlc compiler to check that your solutions conform
+ *    to the coding rules.
+ *  2. Use the BDD checker to formally verify that your solutions produce 
+ *    the correct answers.
  */
 
-
 #endif
+
+
+
 /* 
  * bitNor - ~(x|y) using only ~ and & 
- *   Example: bitNor(0x6, 0x5) = 0xFFFFFFF8
- *   Legal ops: ~ &
- *   Max ops: 8
- *   Rating: 1
+ *  Example: bitNor(0x6, 0x5) = 0xFFFFFFF8
+ *  Legal ops: ~ &
+ *  Max ops: 8
+ *  Rating: 1
  */
 int bitNor(int x, int y) {
   return (~x)&(~y);
 }
 /* 
  * TMax - return maximum two's complement integer 
- *   Legal ops: ! ~ & ^ | + << >>
- *   Max ops: 4
- *   Rating: 1
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 4
+ *  Rating: 1
  */
 int tmax(void) {
   return ~(1<<31);
 }
 /* 
  * isNotEqual - return 0 if x == y, and 1 otherwise 
- *   Examples: isNotEqual(5,5) = 0, isNotEqual(4,5) = 1
- *   Legal ops: ! ~ & ^ | + << >>
- *   Max ops: 6
- *   Rating: 2
+ *  Examples: isNotEqual(5,5) = 0, isNotEqual(4,5) = 1
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 6
+ *  Rating: 2
  */
 int isNotEqual(int x, int y) {
   return !!(x^y);
 }
 /* 
  * replaceByte(x,n,c) - Replace byte n in x with c
- *   Bytes numbered from 0 (LSB) to 3 (MSB)
- *   Examples: replaceByte(0x12345678,1,0xab) = 0x1234ab78
- *   You can assume 0 <= n <= 3 and 0 <= c <= 255
- *   Legal ops: ! ~ & ^ | + << >>
- *   Max ops: 10
- *   Rating: 3
+ *  Bytes numbered from 0 (LSB) to 3 (MSB)
+ *  Examples: replaceByte(0x12345678,1,0xab) = 0x1234ab78
+ *  You can assume 0 <= n <= 3 and 0 <= c <= 255
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 10
+ *  Rating: 3
  */
 int replaceByte(int x, int n, int c) {
-  return (c<<(n<<3))|(~(255<<(n<<3))&x);
+  int s = n<<3;
+  return (c<<s)|(~(255<<s)&x);
 }
 /* 
  * leastBitPos - return a mask that marks the position of the
- *               least significant 1 bit. If x == 0, return 0
- *   Example: leastBitPos(96) = 0x20
- *   Legal ops: ! ~ & ^ | + << >>
- *   Max ops: 6
- *   Rating: 2 
+ *          least significant 1 bit. If x == 0, return 0
+ *  Example: leastBitPos(96) = 0x20
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 6
+ *  Rating: 2 
  */
 int leastBitPos(int x) {
   return x&((~x)+1);
 }
 /* 
  * oddBits - return word with all odd-numbered bits set to 1
- *   Legal ops: ! ~ & ^ | + << >>
- *   Max ops: 8
- *   Rating: 2
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 8
+ *  Rating: 2
  */
 int oddBits(void) {
   int x=0xaa+(0xaa<<8);
@@ -195,22 +198,28 @@ int oddBits(void) {
 }
 /* 
  * rotateLeft - Rotate x to the left by n
- *   Can assume that 0 <= n <= 31
- *   Examples: rotateLeft(0x87654321,4) = 0x76543218
- *   Legal ops: ~ & ^ | + << >> !
- *   Max ops: 25
- *   Rating: 3 
+ *  Can assume that 0 <= n <= 31
+ *  Examples: rotateLeft(0x87654321,4) = 0x76543218
+ *  Legal ops: ~ & ^ | + << >> !
+ *  Max ops: 25
+ *  Rating: 3 
  */
 int rotateLeft(int x, int n) {
   return (((~(1<<31)) & (x>>1)) >> (33+ ~(n+1))) + (x<<n);
 }
+// create bitmask of 011111111
+// move x over by one (11010101 > 11101010)
+// and them together to get non-neg: 01101010
+// 33
+
+
 /* 
  * rempwr2 - Compute x%(2^n), for 0 <= n <= 30
- *   Negative arguments should yield negative remainders
- *   Examples: rempwr2(15,2) = 3, rempwr2(-35,3) = -3
- *   Legal ops: ! ~ & ^ | + << >>
- *   Max ops: 20
- *   Rating: 3
+ *  Negative arguments should yield negative remainders
+ *  Examples: rempwr2(15,2) = 3, rempwr2(-35,3) = -3
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 20
+ *  Rating: 3
  */
 int rempwr2(int x, int n) {
   int r=x&((1<<n)+~0);
@@ -218,10 +227,10 @@ int rempwr2(int x, int n) {
 }
 /* 
  * conditional - same as x ? y : z 
- *   Example: conditional(2,4,5) = 4
- *   Legal ops: ! ~ & ^ | + << >>
- *   Max ops: 16
- *   Rating: 3
+ *  Example: conditional(2,4,5) = 4
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 16
+ *  Rating: 3
  */
 int conditional(int x, int y, int z) {
   x= ~(!x)+1;
@@ -229,10 +238,10 @@ int conditional(int x, int y, int z) {
 }
 /*
  * bitParity - returns 1 if x contains an odd number of 0's
- *   Examples: bitParity(5) = 0, bitParity(7) = 1
- *   Legal ops: ! ~ & ^ | + << >>
- *   Max ops: 20
- *   Rating: 4
+ *  Examples: bitParity(5) = 0, bitParity(7) = 1
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 20
+ *  Rating: 4
  */
 int bitParity(int x) { 
   x=x^(x>>16);
@@ -243,95 +252,102 @@ int bitParity(int x) {
 }
 /*
  * multFiveEighths - multiplies by 5/8 rounding toward 0.
- *   Should exactly duplicate effect of C expression (x*5/8),
- *   including overflow behavior.
- *   Examples: multFiveEighths(77) = 48
- *             multFiveEighths(-22) = -13
- *             multFiveEighths(1073741824) = 13421728 (overflow)
- *   Legal ops: ! ~ & ^ | + << >>
- *   Max ops: 12
- *   Rating: 3
+ *  Should exactly duplicate effect of C expression (x*5/8),
+ *  including overflow behavior.
+ *  Examples: multFiveEighths(77) = 48
+ *         multFiveEighths(-22) = -13
+ *         multFiveEighths(1073741824) = 13421728 (overflow)
+ *  Legal ops: ! ~ & ^ | + << >>
+ *  Max ops: 12
+ *  Rating: 3
  */
 int multFiveEighths(int x) {
-  
-    int s=x>>31;
-    int q=~s+1;
-    int n=(x^s)+q;
-    int y=n&7;
-
-    x=n>>3;
-    x+=(x<<2);
-
-    
-
-    y = y + (y << 2);
-
-    return (s ^ (x + (y >> 3))) +q;
-    
-    /*
-    x >>= 3;
-    x &= ~((~0)<<28);
-    x += x<<2;
-    return x;
-    */
+  int neg, t;
+     
+  neg = ~0; //will be padded with 1's
+  t = !!neg;
+     
+  x = (x ^ neg) + t; //convert from negative if necessary
+  x = (x << 2) + x;
+  x >>= 3;
+     
+  return (x ^ neg) + t;
 }
 /* 
  * logicalNeg - implement the ! operator, using all of 
- *              the legal operators except !
- *   Examples: logicalNeg(3) = 0, logicalNeg(0) = 1
- *   Legal ops: ~ & ^ | + << >>
- *   Max ops: 12
- *   Rating: 4 
+ *          the legal operators except !
+ *  Examples: logicalNeg(3) = 0, logicalNeg(0) = 1
+ *  Legal ops: ~ & ^ | + << >>
+ *  Max ops: 12
+ *  Rating: 4 
  */
 int logicalNeg(int x) {
   return ((((~x+1)|x)>>31)&1)^1;
 }
 /* 
  * float_neg - Return bit-level equivalent of expression -f for
- *   floating point argument f.
- *   Both the argument and result are passed as unsigned int's, but
- *   they are to be interpreted as the bit-level representations of
- *   single-precision floating point values.
- *   When argument is NaN, return argument.
- *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
- *   Max ops: 10
- *   Rating: 2
+ *  floating point argument f.
+ *  Both the argument and result are passed as unsigned int's, but
+ *  they are to be interpreted as the bit-level representations of
+ *  single-precision floating point values.
+ *  When argument is NaN, return argument.
+ *  Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *  Max ops: 10
+ *  Rating: 2
  */
 unsigned float_neg(unsigned uf) {
-  if (uf == 0x7fc00000 || uf == 0xffc00000)
-    return uf;
+  if ((uf|0x80000000) == 0xffc00000)
+   return uf;
   return uf ^ 0x80000000;
 }
 
 /* 
  * float_i2f - Return bit-level equivalent of expression (float) x
- *   Result is returned as unsigned int, but
- *   it is to be interpreted as the bit-level representation of a
- *   single-precision floating point values.
- *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
- *   Max ops: 30
- *   Rating: 4
+ *  Result is returned as unsigned int, but
+ *  it is to be interpreted as the bit-level representation of a
+ *  single-precision floating point values.
+ *  Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *  Max ops: 30
+ *  Rating: 4
  */
 unsigned float_i2f(int x) {
+  unsigned sign=0;
+  unsigned shift_left =0;
+  unsigned frac;
   unsigned exponent;
-  unsigned mts;
-  unsigned sign;
+  int round = 0;
+  int mask = 0x80000000;
+  if (x==0)
+    return 0;
+  if (x<0){
+    sign = mask;
+    x=-x;
+  }
 
-  sign = x & (~(1<<31));
+  while (!(mask & x))
+  {
+    x <<= 1;
+    shift_left++;
+  }
+  frac = x<<1;
+  exponent = 158 - shift_left;
+  if (((frac & 0x01ff) > 0x0100) || ((frac & 0x03ff) == 0x0300)) 
+    round = 1;
+
+  return sign + (exponent << 23) + (frac >> 9) + round;
   
-
-  return 2;
+  
 }
 /* 
  * float_twice - Return bit-level equivalent of expression 2*f for
- *   floating point argument f.
- *   Both the argument and result are passed as unsigned int's, but
- *   they are to be interpreted as the bit-level representation of
- *   single-precision floating point values.
- *   When argument is NaN, return argument
- *   Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
- *   Max ops: 30
- *   Rating: 4
+ *  floating point argument f.
+ *  Both the argument and result are passed as unsigned int's, but
+ *  they are to be interpreted as the bit-level representation of
+ *  single-precision floating point values.
+ *  When argument is NaN, return argument
+ *  Legal ops: Any integer/unsigned operations incl. ||, &&. also if, while
+ *  Max ops: 30
+ *  Rating: 4
  */
 unsigned float_twice(unsigned uf) {
   unsigned exponent;
@@ -350,9 +366,9 @@ unsigned float_twice(unsigned uf) {
   mts = uf & ((~0)+(1<<23));
 
   if (exponent || !mts)
-    exponent +=  1;
+   exponent +=  1;
   else
-    mts <<= 1;
+   mts <<= 1;
 
   exponent <<= 23;
   exponent += ((uf>>31)<<31);

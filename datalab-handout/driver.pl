@@ -383,15 +383,16 @@ if ($nickname) {
     $autoresult = "$tpoints|$total_c_points|$total_p_points|$tops";
     foreach $name (sort {$puzzle_number{$a} <=> $puzzle_number{$b}} 
 	       keys %puzzle_number) {
-	$autoresult .= " |$name:$puzzle_c_points{$name}:$puzzle_c_rating{$name}:$puzzle_p_points{$name}:$puzzle_p_ops{$name}";
-    }
+   $autoresult .= " |$name:$puzzle_c_points{$name}:$puzzle_c_rating{$name}:$puzzle_p_points{$name}:$puzzle_p_ops{$name}";
+   #$autoresult .= " |$name:$puzzle_c_points{$name}:$puzzle_c_points{$name}:$puzzle_p_points{$name}:1";
+       }
 
     # Post the autoresult to the server. The Linux login id is
     # concatenated with the user-supplied nickname for some (very) loose
     # authentication of submissions.
     &Driverlib::driver_post("$login:$nickname", $autoresult, $autograded);
+    #&Driverlib::driver_post("ghost", $autoresult, $autograded);
 }
-
 # Clean up and exit
 clean ($tmpdir);
 exit;
