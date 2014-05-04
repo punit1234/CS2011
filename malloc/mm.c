@@ -141,16 +141,19 @@ void delete(void* ptr)
     void *next = GET_NEXT(ptr);
     void *prev = GET_PREV(ptr);
 
-    // Front of the list
-    if (prev == NULL) {
+    if (prev == NULL)
+    {
         free_list = next;
-        if (next != NULL) {
+        if (next != NULL)
+        {
             SET_PREV(next, NULL);
         }
     } 
-    else {
+    else
+    {
         SET_NEXT(prev, next);
-        if (next != NULL) {
+        if (next != NULL)
+        {
             SET_PREV(next, prev);
         }
     }
