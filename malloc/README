@@ -1,0 +1,97 @@
+[[README]]
+[Ted Meyer]
+[Malloc]
+
+ALgorithm:
+	I used the linked list approach, though with a twist. Each block
+	of memory has a footer and a header to it, each of which is 4 bytes.
+	The reason for this is that there needs to be a doubly linked list 
+	of blocks in the model, which requires two "location references".
+	I say location references, since I stored the difference between
+	two blocks instead of a pointer to them, in order to fit each reference
+	within a 4 block boundry. The header points to the next block, and the
+	footer points to the previous block. The other cool trick I used was
+	an abuse of the "eight byte alignment" that was required for this
+	assignment. Since I know that each block is aligned to a multiple of 8,
+	every difference value will also be a multiple of 8. As such, the three
+	LSB's of each "location reference" are all 0's. This let me use a makeshift
+	union where I could store the state of the block (free or allocated)
+	inside of this three bit chunk. This was a trick I found when reading
+	about some of the algorithms online (gotta love stack overflow).
+
+Memory Management Diagram
+	H - header
+	T - footer
+	A - allocated
+	F - free
+
+the memory starts like this:
++-+------------------------------------+-+
+|H|                  F                 |T|
++-+------------------------------------+-+
+
+then when an allocation happens, say for half of the memory, it becomes:
++-+------+-+-+-------------------------+-+
+|H|  A1  |T|H|           F1            |T|
++-+------+-+-+-------------------------+-+
+where the first T stores the unioned values:
+	M - the size of A1
+	1 - signifying that the memory is allocated
+and the second H stores the size of F1 and a 0 for free
+
+
+
+let's say take this scenario where we free some memory:
+initial configuration:
++-+----+-+-+----+-+-+----+-+-+----+-+
+|H| A1 |T|H| A2 |T|H| F1 |T|H| A3 |T|
++-+----+-+-+----+-+-+----+-+-+----+-+
+
+when we free A3, this is what happens:
+	intermediate step:
+	+-+----+-+-+----+-+-+----+-+-+----+-+
+	|H| A1 |T|H| A2 |T|H| F1 |T|H| F2 |T|
+	+-+----+-+-+----+-+-+----+-+-+----+-+
+	the old memory gets marked as free
+	then the function delete(F2) is called.
+	in this function, it checks the surrounding blocks to see if 
+	any are free. F1 is free, so it merges them into:
+	+-+----+-+-+----+-+-+-------------+-+
+	|H| A1 |T|H| A2 |T|H|      F1     |T|
+	+-+----+-+-+----+-+-+-------------+-+
+
+now if we call free of A1, we get this:
++-+----+-+-+----+-+-+-------------+-+
+|H| F1 |T|H| A2 |T|H|      F2     |T|
++-+----+-+-+----+-+-+-------------+-+
+
+finally, if we call free of A2, we follow the delete algorithm again.
+this time, however, both the previous and next nodes are free as well,
+so instead of expanding A2 (which is now F-temp), we get the size of A2
+plus the size of F2, plus the size of the four headers inside, and set
+that as the new size of F1, to get:
++-+------------------------------------+-+
+|H|                  F                 |T|
++-+------------------------------------+-+
+
+realloc is really neive however.
+if the user tries to realloc to 0, then pretend they called free
+if the old pointer was 0, just pretend they called malloc
+otherwise, attempt to allocate new space:
+	if it fails, return NULL
+	if it succedes, copy the user's memory, free the old ptr, and return
+		the new one
+
+
+
+
+
+
+the examine function:
+this just goes through the linked list and checks to make sure that each
+pointer lines up in the doubly linked list, and that there are no corrupt
+or missing chunks of memory, and that all the memory is aligned.
+
+
+I also attempted to make my comments humerous, as well as my print statements
+in the check function.

@@ -39,7 +39,6 @@ team_t team = {
 
 
 
-
 // size declarations:
 #define HEADER_SIZE   4       // the size of the header in bytes
 #define DOUBLE_HEADER 8       // get it? like baseball :D
